@@ -10,12 +10,24 @@ class App extends React.Component {
     this.state = {
       repos: []
     }
+    // this.search = this.search.bind(this);
 
   }
 
   search (term) {
-    console.log(`${term} was searched`);
+    // console.log(this);
+    // console.log(`${term} was searched successfully.`);
     // TODO
+    var searchRequest = $.post('/repos', function(data) {
+    })
+      .done((data) => {
+        console.log(data);
+        this.setState({repos: data});
+        console.log(`${term} was searched successfully.`);
+      })
+      .fail(function() {
+        console.error(`${term} was not searched.`);
+      });
   }
 
   render () {
