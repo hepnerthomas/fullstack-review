@@ -1,14 +1,38 @@
+const gitHubHelpers = require('../helpers/github.js');
+const db = require('../database/index.js');
 const express = require('express');
 let app = express();
 
 app.use(express.static(__dirname + '/../client/dist'));
+
+// middleware
+const bodyParser = require('body-parser')
+app.use(bodyParser.json()) // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 app.post('/repos', function (req, res) {
   // TODO - your code here!
   // This route should take the github username provided
   // and get the repo information from the github API, then
   // save the repo information in the database
-  res.send([]);
+
+  // get the username from the req object
+  var username = req.body.username;
+  console.log(username);
+
+  // call getReposByUserName(username) and store response in repos
+  gitHubHelpers.getReposByUsername(username)
+    .then((repos) => {
+      // call db.save(repos)
+      // if success: respond with 201
+      console.log("GitHub API request succeeded!");
+      res.sendStatus(201);
+    })
+    .catch((error) => {
+      console.log("Bad GitHub API request");
+        // if err: respond with status code 400
+      res.sendStatus(400);
+    })
 });
 
 app.get('/repos', function (req, res) {
