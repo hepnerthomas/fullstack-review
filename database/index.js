@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/fetcher');
+mongoose.connect('mongodb://localhost/fetcher'); // , {useNewUrlParser: true}
 
 let repoSchema = mongoose.Schema({
-  id: Number,
+  _id: Number,
   name: String,
   owner_id: Number,
   owner_login: String,
@@ -26,11 +26,12 @@ let save = (repos) => {
   // Pseudocode
 
   // iterate through the list of repos
-  // add total_count field to each repo
+  // add _id and total_count fields to each repo
   var repoDocuments = repos.map((repo) => {
+    repo['_id'] = repo['id'];
     repo['total_count'] = repo['stargazers_count'] + repo['watchers_count'] + repo['forks_count'];
     // let document = new Repo(repo);
-    return document;
+    return repo;
   });
 
   // add all newly created repo documents to the Mongo database
@@ -38,7 +39,62 @@ let save = (repos) => {
     if (err) {
       console.log(err);
     }
+    else {
+      console.log("success: inserted new repos to the database!");
+    }
   });
+
+  // // insert one repo into the Mongo DB
+  // const firstRepo = new Repo(repoDocuments[0]);
+  // firstRepo.save(function (err) {
+  //   if (err) {
+  //     console.log(err);
+  //   }
+  // });
+
+  // // find id in repo and print out its object
+  // 18221276, 20978623, 56271164
+  // Repo.findById(56271164, (err, data) => {
+  //   if (err) {
+  //     console.log(err);
+  //   } else {
+  //     console.log(data._id, data.name, data.total_count);
+  //   }
+  // });
+
+  // Repo.findByIdAndRemove(18221276, (err, data) => {
+  //   if (err) {
+  //     console.log(err);
+  //   } else {
+  //     console.log(data._id, data.name, data.total_count);
+  //   }
+  // });
+
+  // Repo.deleteMany(18221276, (err, data) => {
+  //   if (err) {
+  //     console.log(err);
+  //   } else {
+  //     console.log(data._id, data.name, data.total_count);
+  //   }
+  // });
+
+  // var addedRepos = Repo.find({}, (err, data) => {
+  //   if (err) {
+  //     console.log(err);
+  //   } else {
+  //     return data;
+  //   }
+  // });
+
+
+  // // find id in repo and print out its object
+  // Repo.findOne({_id: 18221276}, (err, data) => {
+  //   if (err) {
+  //     console.log(err);
+  //   } else {
+  //     console.log(data.id, data.name, data.total_count);
+  //   }
+  // });
 
 }
 
