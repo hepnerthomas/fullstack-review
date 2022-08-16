@@ -18,7 +18,8 @@ class App extends React.Component {
     // console.log(this);
     // console.log(`${term} was searched successfully.`);
     // TODO
-    var searchRequest = $.post('/repos', function(data) {
+    var params = {username: term}
+    var searchRequest = $.post('/repos', params, function(data) {
     })
       .done((data) => {
         console.log(data);
