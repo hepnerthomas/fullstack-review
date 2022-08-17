@@ -10,8 +10,9 @@ class RepoList extends React.Component {
   render() {
     const {repos} = this.props;
     var repoListComponents = repos.map((repo) => {
-      let url = 'https://github.com/' + repo.owner_id + '/' + repo.name;
+      let url = 'https://github.com/' + repo.owner_login + '/' + repo.name;
       // console.log(url);
+      repo.url = url;
       return <RepoListComponent key={repo.id} repo={repo}/>;
     });
     console.log(repoListComponents);

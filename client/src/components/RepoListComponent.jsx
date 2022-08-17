@@ -8,6 +8,8 @@ class RepoListComponent extends React.Component {
 
   render() {
     const {repo} = this.props;
+    var url = repo.url;
+    console.log(url);
     return (
       <div>
         <li><a href={repo.url}>{repo.name}</a></li>
