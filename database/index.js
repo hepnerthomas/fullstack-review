@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/fetcher');
+if (process.env.type === "PROD") {
+  mongoose.connect('mongodb://hepnerthomas/fetcher');
+} else {
+  mongoose.connect('mongodb://localhost/fetcher');
+}
+
 
 let repoSchema = mongoose.Schema({
   // _id: Number,
