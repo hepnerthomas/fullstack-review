@@ -24,9 +24,25 @@ app.post('/repos', function (req, res) {
   gitHubHelpers.getReposByUsername(username)
     .then((repos) => {
       // call db.save(repos)
-      // if success: respond with 201
+      // console.log(repos.data[0]);
+    // add _id and total_count fields to each repo
+      var repoDocuments = repos.data.map((repo) => {
+        // repo['_id'] = repo['id'];
+        repo['owner_id'] = repo.owner.id;
+        repo['owner_login'] = repo.owner.login;
+        repo['total_count'] = repo['stargazers_count'] + repo['watchers_count'] + repo['forks_count'];
+        // let document = new Repo(repo);
+        return repo;
+      });
+      console.log(repoDocuments[0]);
       console.log("GitHub API request succeeded!");
-      res.sendStatus(201);
+      return db.save(repoDocuments)
+      // db.save(repos.data)
+      // .then(() => res.sendStatus(201))
+    })
+    .then(() => {
+        console.log("Saved GitHub repos to the database!");
+        res.sendStatus(201);
     })
     .catch((error) => {
       console.log("Bad GitHub API request");
